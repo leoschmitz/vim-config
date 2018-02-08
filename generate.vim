@@ -45,7 +45,7 @@ Plug 'Raimondi/delimitMate'
 " not sure about this one
 " Plug 'majutsushi/tagbar'
 " Plug 'scrooloose/syntastic'
-Plug 'Yggdroot/indentLine'
+" Plug 'Yggdroot/indentLine'
 " Plug 'avelino/vim-bootstrap-updater'
 Plug 'sheerun/vim-polyglot'
 if isdirectory('/usr/local/opt/fzf')
