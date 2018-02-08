@@ -187,30 +187,30 @@ set t_Co=256
 set guioptions=egmrti
 set gfn=Monospace\ 10
 
-if has("gui_running")
-  if has("gui_mac") || has("gui_macvim")
-    set guifont=Menlo:h12
-    set transparency=7
-  endif
-else
-  let g:CSApprox_loaded = 1
-
-  " IndentLine
-  let g:indentLine_enabled = 1
-  let g:indentLine_concealcursor = 0
-  let g:indentLine_char = '┆'
-  let g:indentLine_faster = 1
-
-  
-  if $COLORTERM == 'gnome-terminal'
-    set term=gnome-256color
-  else
-    if $TERM == 'xterm'
-      set term=xterm-256color
-    endif
-  endif
-  
-endif
+"if has("gui_running")
+"  if has("gui_mac") || has("gui_macvim")
+"    set guifont=Menlo:h12
+"    set transparency=7
+"  endif
+"else
+"  let g:CSApprox_loaded = 1
+"
+"  " IndentLine
+"  let g:indentLine_enabled = 1
+"  let g:indentLine_concealcursor = 0
+"  let g:indentLine_char = '┆'
+"  let g:indentLine_faster = 1
+"
+"
+"  if $COLORTERM == 'gnome-terminal'
+"    set term=gnome-256color
+"  else
+"    if $TERM == 'xterm'
+"      set term=xterm-256color
+"    endif
+"  endif
+"
+"endif
 
 
 if &term =~ '256color'
@@ -255,7 +255,7 @@ endif
 "*****************************************************************************
 "" Abbreviations
 "*****************************************************************************
-"" no one is really happy until you have this shortcuts
+" no one is really happy until you have this shortcuts
 cnoreabbrev W! w!
 cnoreabbrev Q! q!
 cnoreabbrev Qall! qall!
@@ -310,7 +310,7 @@ endif
 "*****************************************************************************
 "" Autocmd Rules
 "*****************************************************************************
-"" The PC is fast enough, do syntax highlight syncing from start unless 200 lines
+" The PC is fast enough, do syntax highlight syncing from start unless 200 lines
 augroup vimrc-sync-fromstart
   autocmd!
   autocmd BufEnter * :syntax sync maxlines=200
@@ -341,7 +341,7 @@ set autoread
 "" Mappings
 "*****************************************************************************
 
-"" Split
+" Split
 noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
 
@@ -361,10 +361,10 @@ nnoremap <leader>ss :SaveSession<Space>
 nnoremap <leader>sd :DeleteSession<CR>
 nnoremap <leader>sc :CloseSession<CR>
 
-"" Tabs
-nnoremap <Tab> gt
-nnoremap <S-Tab> gT
-nnoremap <silent> <S-t> :tabnew<CR>
+"" Tabs -> useless for now
+" nnoremap <Tab> gt
+" nnoremap <S-Tab> gT
+" nnoremap <silent> <S-t> :tabnew<CR>
 
 "" Set working directory
 nnoremap <leader>. :lcd %:p:h<CR>
@@ -438,22 +438,21 @@ if has('macunix')
 endif
 
 "" Buffer nav
-noremap <leader>z :bp<CR>
-noremap <leader>q :bp<CR>
-noremap <leader>x :bn<CR>
-noremap <leader>w :bn<CR>
-
-"" Close buffer
-noremap <leader>c :bd<CR>
+" noremap <leader>z :bp<CR>
+" noremap <leader>q :bp<CR>
+" noremap <leader>x :bn<CR>
+" noremap <leader>w :bn<CR>
+" "" Close buffer
+" noremap <leader>c :bd<CR>
 
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
 
 "" Switching windows
-noremap <C-j> <C-w>j
-noremap <C-k> <C-w>k
-noremap <C-l> <C-w>l
-noremap <C-h> <C-w>h
+"noremap <C-j> <C-w>j
+"noremap <C-k> <C-w>k
+"noremap <C-l> <C-w>l
+"noremap <C-h> <C-w>h
 
 "" Vmap for maintain Visual Mode after shifting > and <
 vmap < <gv
@@ -514,7 +513,7 @@ let g:jedi#smart_auto_mappings = 0
 let g:syntastic_python_checkers=['python', 'flake8']
 
 " vim-airline
-let g:airline#extensions#virtualenv#enabled = 1
+"let g:airline#extensions#virtualenv#enabled = 1
 
 " Syntax highlight
 " Default highlight is better than polyglot
@@ -538,7 +537,7 @@ endif
 " if !exists('g:airline_symbols')
 "   let g:airline_symbols = {}
 " endif
-" 
+"
 " if !exists('g:airline_powerline_fonts')
 "   let g:airline#extensions#tabline#left_sep = ' '
 "   let g:airline#extensions#tabline#left_alt_sep = '|'
@@ -559,7 +558,7 @@ endif
 " else
 "   let g:airline#extensions#tabline#left_sep = ''
 "   let g:airline#extensions#tabline#left_alt_sep = ''
-" 
+"
 "   " powerline symbols
 "   let g:airline_left_sep = ''
 "   let g:airline_left_alt_sep = ''
