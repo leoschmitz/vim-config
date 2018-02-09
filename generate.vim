@@ -170,6 +170,10 @@ let g:session_autoload = "no"
 let g:session_autosave = "no"
 let g:session_command_aliases = 1
 
+" fold level so it does not autofold everything
+set foldlevel=100
+set foldmethod=indent
+
 "*****************************************************************************
 "" Visual Settings
 "*****************************************************************************
