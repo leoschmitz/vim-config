@@ -515,7 +515,7 @@ let g:jedi#completions_command = "<C-Space>"
 let g:jedi#smart_auto_mappings = 0
 
 " syntastic
-let g:syntastic_python_checkers=['python', 'flake8']
+let g:syntastic_python_checkers=['python', 'pylint']
 
 " vim-airline
 "let g:airline#extensions#virtualenv#enabled = 1
@@ -523,7 +523,7 @@ let g:syntastic_python_checkers=['python', 'flake8']
 " Syntax highlight
 " Default highlight is better than polyglot
 let g:polyglot_disabled = ['python']
-let python_highlight_all = 1
+" let python_highlight_all = 1
 
 
 "*****************************************************************************
