@@ -522,7 +522,7 @@ let g:syntastic_python_checkers=['python', 'pylint']
 
 " Syntax highlight
 " Default highlight is better than polyglot
-let g:polyglot_disabled = ['python']
+" let g:polyglot_disabled = ['python']
 " let python_highlight_all = 1
 
 
