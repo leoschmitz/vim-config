@@ -1,2 +1,3 @@
 #!/bin/bash
-ln -nsf $PWD/generate.vim ~/.vimrc
+set -euo pipefail
+ln -nsf "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/generate.vim" ~/.vimrc
