@@ -22,7 +22,7 @@ if !filereadable(vimplug_exists)
   silent !\curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   let g:not_finish_vimplug = "yes"
 
-  autocmd VimEnter * PlugInstall
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " Required:
@@ -54,10 +54,7 @@ else
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
 endif
-let g:make = 'gmake'
-if exists('make')
-        let g:make = 'make'
-endif
+let g:make = executable('gmake') ? 'gmake' : 'make'
 Plug 'Shougo/vimproc.vim', {'do': g:make}
 
 "" Vim-Session
@@ -131,8 +128,6 @@ filetype plugin indent on
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
-set bomb
-set binary
 set ttyfast
 
 "" Fix backspace indent
@@ -238,27 +233,17 @@ set modeline
 set modelines=10
 
 set title
-set titleold="Terminal"
+set titleold=Terminal
 set titlestring=%F
 
-set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
+" Plugins are not loaded yet at this point, so check for fugitive lazily
+set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
+set statusline+=\ %{exists('*FugitiveStatusline')?FugitiveStatusline():''}
 
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in.
 nnoremap n nzzzv
 nnoremap N Nzzzv
-
-if exists("*fugitive#statusline")
-  set statusline+=%{fugitive#statusline()}
-endif
-
-" vim-airline
-" let g:airline_theme = 'powerlineish'
-" let g:airline#extensions#syntastic#enabled = 1
-" let g:airline#extensions#branch#enabled = 1
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tagbar#enabled = 1
-" let g:airline_skip_empty_sections = 1
 
 "*****************************************************************************
 "" Abbreviations
@@ -355,13 +340,13 @@ noremap <Leader>v :<C-u>vsplit<CR>
 
 "" Git
 noremap <Leader>ga :Gwrite<CR>
-noremap <Leader>gc :Gcommit<CR>
-noremap <Leader>gsh :Gpush<CR>
-noremap <Leader>gll :Gpull<CR>
-noremap <Leader>gs :Gstatus<CR>
-noremap <Leader>gb :Gblame<CR>
-noremap <Leader>gd :Gvdiff<CR>
-noremap <Leader>gr :Gremove<CR>
+noremap <Leader>gc :Git commit<CR>
+noremap <Leader>gsh :Git push<CR>
+noremap <Leader>gll :Git pull<CR>
+noremap <Leader>gs :Git<CR>
+noremap <Leader>gb :Git blame<CR>
+noremap <Leader>gd :Gvdiffsplit<CR>
+noremap <Leader>gr :GRemove<CR>
 
 " session management
 nnoremap <leader>so :OpenSession<Space>
@@ -376,9 +361,6 @@ nnoremap <leader>sc :CloseSession<CR>
 
 "" Set working directory
 nnoremap <leader>. :lcd %:p:h<CR>
-
-"" Opens an edit command with the path of the currently edited file filled in
-noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 
 "" Opens a tab edit command with the path of the currently edited file filled
 noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
@@ -411,33 +393,21 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:UltiSnipsEditSplit="vertical"
 
-" syntastic
-let g:syntastic_always_populate_loc_list=1
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
-let g:syntastic_style_error_symbol = '✗'
-let g:syntastic_style_warning_symbol = '⚠'
-let g:syntastic_auto_loc_list=1
-let g:syntastic_aggregate_errors = 1
-
-" Tagbar
-nmap <silent> <F4> :TagbarToggle<CR>
-let g:tagbar_autofocus = 1
-
 " Disable visualbell
 set noerrorbells visualbell t_vb=
-if has('autocmd')
+augroup vimrc-visualbell
+  autocmd!
   autocmd GUIEnter * set visualbell t_vb=
-endif
+augroup END
 
 "" Copy/Paste/Cut
 if has('unnamedplus')
   set clipboard=unnamed,unnamedplus
 endif
 
-noremap YY "+y<CR>
-noremap <leader>p "+gP<CR>
-noremap XX "+x<CR>
+noremap YY "+y
+noremap <leader>p "+gP
+noremap XX "+x
 
 if has('macunix')
   " pbcopy for OSX copy/paste
@@ -463,28 +433,33 @@ nnoremap <silent> <leader><space> :noh<cr>
 "noremap <C-h> <C-w>h
 
 "" Vmap for maintain Visual Mode after shifting > and <
-vmap < <gv
-vmap > >gv
+xnoremap < <gv
+xnoremap > >gv
 
 "" Move visual block
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 "" Open current line on GitHub
-nnoremap <Leader>o :.Gbrowse<CR>
+nnoremap <Leader>o :.GBrowse<CR>
 
 "*****************************************************************************
 "" Custom configs
 "*****************************************************************************
 
 " c
-autocmd FileType c setlocal tabstop=4 shiftwidth=4 expandtab
-autocmd FileType cpp setlocal tabstop=4 shiftwidth=4 expandtab
+augroup vimrc-c
+  autocmd!
+  autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 expandtab
+augroup END
 
 
 " html
 " for html files, 2 spaces
-autocmd Filetype html setlocal ts=2 sw=2 expandtab
+augroup vimrc-html
+  autocmd!
+  autocmd FileType html setlocal ts=2 sw=2 expandtab
+augroup END
 
 
 " javascript
@@ -517,12 +492,6 @@ let g:jedi#show_call_signatures = "0"
 let g:jedi#completions_command = "<C-Space>"
 let g:jedi#smart_auto_mappings = 0
 
-" syntastic
-let g:syntastic_python_checkers=['python', 'pylint']
-
-" vim-airline
-"let g:airline#extensions#virtualenv#enabled = 1
-
 " Syntax highlight
 " Default highlight is better than polyglot
 " let g:polyglot_disabled = ['python']
@@ -537,42 +506,3 @@ if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
 
-"*****************************************************************************
-"" Convenience variables
-"*****************************************************************************
-
-" vim-airline
-" if !exists('g:airline_symbols')
-"   let g:airline_symbols = {}
-" endif
-"
-" if !exists('g:airline_powerline_fonts')
-"   let g:airline#extensions#tabline#left_sep = ' '
-"   let g:airline#extensions#tabline#left_alt_sep = '|'
-"   let g:airline_left_sep          = '▶'
-"   let g:airline_left_alt_sep      = '»'
-"   let g:airline_right_sep         = '◀'
-"   let g:airline_right_alt_sep     = '«'
-"   let g:airline#extensions#branch#prefix     = '⤴' "➔, ➥, ⎇
-"   let g:airline#extensions#readonly#symbol   = '⊘'
-"   let g:airline#extensions#linecolumn#prefix = '¶'
-"   let g:airline#extensions#paste#symbol      = 'ρ'
-"   let g:airline_symbols.linenr    = '␊'
-"   let g:airline_symbols.branch    = '⎇'
-"   let g:airline_symbols.paste     = 'ρ'
-"   let g:airline_symbols.paste     = 'Þ'
-"   let g:airline_symbols.paste     = '∥'
-"   let g:airline_symbols.whitespace = 'Ξ'
-" else
-"   let g:airline#extensions#tabline#left_sep = ''
-"   let g:airline#extensions#tabline#left_alt_sep = ''
-"
-"   " powerline symbols
-"   let g:airline_left_sep = ''
-"   let g:airline_left_alt_sep = ''
-"   let g:airline_right_sep = ''
-"   let g:airline_right_alt_sep = ''
-"   let g:airline_symbols.branch = ''
-"   let g:airline_symbols.readonly = ''
-"   let g:airline_symbols.linenr = ''
-" endif
